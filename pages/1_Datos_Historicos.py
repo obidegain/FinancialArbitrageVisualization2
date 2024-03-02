@@ -2,8 +2,8 @@ import streamlit as st
 from strategy.strategy import Commodity
 import streamlit as st
 import pandas as pd
-from connect_with_bbdd import connect_to_bbdd, get_all_data_from_table, modify_specific_record_of_hisotricalprice
-from strategy.mapping_names import get_pretty_names
+from connect_with_bbdd import connect_to_bbdd, get_all_data_from_table
+from strategy.mapping_names import get_pretty_names, valid_tickers
 
 st.set_page_config(layout="wide")
 
@@ -33,9 +33,9 @@ def get_tickers():
     tickers_unique = set()
     for ticker in tickers:
         ticker_without_year = ticker[:-2]
-        if "/" in ticker_without_year:
+        if "/" in ticker_without_year and ticker_without_year in valid_tickers:
             tickers_unique.add(ticker_without_year)
-    tickers_unique_list = list(tickers_unique)
+    tickers_unique_list = sorted(list(tickers_unique), reverse=True)
     return tickers_unique_list
 
 
@@ -99,7 +99,8 @@ def main():
         with st.container():
             col1, col2, col3, col4, col5 = st.columns(5)
             with col1:
-                year = st.selectbox('Seleccione un año para calcular métricas:', commodity_a.data_to_plot['year_from_ticker'].unique())
+                years = sorted(commodity_a.data_to_plot['year_from_ticker'].unique().tolist(), reverse=True)
+                year = st.selectbox('Seleccione un año para calcular métricas:', years)
 
         with st.container():
             main_measures = commodity_a.get_main_measures(year)
@@ -177,8 +178,11 @@ def main():
         tab1.plotly_chart(fig, theme="streamlit", use_container_width=True)
         tab1.dataframe(pivot_table)
 
-        tab2.write("Datos Ticker:")
-        tab2.dataframe(commodity_a.data_to_plot)
+        tab2.write(f"(Por favor, cambie el año en la solapa de arriba para visualizar la data de otros años)")
+        tab2.write(f"Datos para el año {year}:")
+        df_data_to_plot = commodity_a.data_to_plot
+        data_to_plot_filtered = df_data_to_plot[df_data_to_plot['year_from_ticker'] == year]
+        tab2.dataframe(data_to_plot_filtered)
 
         tab3.write("Datos Retenciones:")
         tab3.dataframe(commodity_a.taxes)

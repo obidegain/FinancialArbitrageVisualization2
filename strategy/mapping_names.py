@@ -30,6 +30,27 @@ mapping_file_name_with_yfinance_tickers = {
     'CRN.CME_SEP': "ZCU", # maix septiembre
 }
 
+valid_tickers = [
+    "CRN.CME/DIC",
+    "CRN.CME/JUL",
+    "CRN.CME/MAY",
+    "MAI.ROS/ABR",
+    "MAI.ROS/DIC",
+    "MAI.ROS/JUL",
+    "MAI.ROS/SEP",
+    "SOJ.ROS/ENE",
+    "SOJ.ROS/JUL",
+    "SOJ.ROS/MAY",
+    "SOJ.ROS/NOV",
+    "SOY.CME/ENE",
+    "SOY.CME/JUL",
+    "SOY.CME/MAY",
+    "SOY.CME/NOV",
+    "TRI.ROS/ENE",
+    "TRI.ROS/JUL",
+    "TRI.ROS/MAR"
+]
+
 
 def get_pretty_names(file_name):
     commodity = mapping_names.get(file_name[:3], file_name[:3])

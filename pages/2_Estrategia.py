@@ -2,8 +2,8 @@ import streamlit as st
 from strategy.strategy import CommodityAnalyzer
 import streamlit as st
 import pandas as pd
-from connect_with_bbdd import connect_to_bbdd, get_all_data_from_table, modify_specific_record_of_hisotricalprice
-from strategy.mapping_names import get_pretty_names
+from connect_with_bbdd import connect_to_bbdd, get_all_data_from_table
+from strategy.mapping_names import get_pretty_names, valid_tickers
 
 st.set_page_config(layout="wide")
 
@@ -34,9 +34,9 @@ def get_tickers():
     tickers_unique = set()
     for ticker in tickers:
         ticker_without_year = ticker[:-2]
-        if "/" in ticker_without_year:
+        if "/" in ticker_without_year and ticker_without_year in valid_tickers:
             tickers_unique.add(ticker_without_year)
-    tickers_unique_list = list(tickers_unique)
+    tickers_unique_list = sorted(list(tickers_unique), reverse=True)
     return tickers_unique_list
 
 
@@ -108,7 +108,8 @@ def main():
         with st.container():
             col1, col2, col3, col4, col5 = st.columns(5)
             with col1:
-                year = st.selectbox('Seleccione un año para calcular métricas:', strategy.data_to_plot['year_from_ticker'].unique())
+                years = sorted(strategy.data_to_plot['year_from_ticker'].unique().tolist(), reverse=True)
+                year = st.selectbox('Seleccione un año para calcular métricas:', years)
 
                 relative_or_nominal = st.radio(
                     "¿En que formato te gustaría ver los datos?",
