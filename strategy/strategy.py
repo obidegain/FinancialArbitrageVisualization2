@@ -3,6 +3,8 @@ from datetime import datetime
 from strategy.mapping_names import get_pretty_names
 import plotly.express as px
 
+watermark_text = "@MarielaBrandoli"
+
 factors = {
     'SOJ': 8,
     'MAI': 10,
@@ -160,6 +162,21 @@ class Commodity:
             selector=dict(name='promedio'),  # Nombre de la serie
             line=dict(dash='dot', color='black')  # Línea punteada y negra
         )
+
+        fig.layout.annotations = [
+            dict(
+                name="mbrandolin watermark",
+                text=watermark_text,
+                textangle=-30,
+                opacity=0.1,
+                font=dict(color="black", size=100),
+                xref="paper",
+                yref="paper",
+                x=0.5,
+                y=0.5,
+                showarrow=False,
+            )
+        ]
 
         return fig.update_layout(height=600, width=800)
 
@@ -364,6 +381,21 @@ class CommodityAnalyzer:
             line=dict(dash='dot', color='black')  # Línea punteada y negra
         )
         fig.update_layout(height=600, width=800)
+
+        fig.layout.annotations = [
+            dict(
+                name="mbrandolin watermark",
+                text=watermark_text,
+                textangle=-30,
+                opacity=0.1,
+                font=dict(color="black", size=100),
+                xref="paper",
+                yref="paper",
+                x=0.5,
+                y=0.5,
+                showarrow=False,
+            )
+        ]
 
         return fig
 
