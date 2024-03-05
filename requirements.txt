@@ -66,3 +66,4 @@ validators==0.22.0
 watchdog==3.0.0
 wcwidth==0.2.13
 zipp==3.17.0
+dotenv==1.0.1
