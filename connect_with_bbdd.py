@@ -8,7 +8,7 @@ dbname = os.getenv('DBNAME')
 user = os.getenv('USER_DB')
 password = os.getenv('PASSWORD')
 host = os.getenv('HOST')
-port = os.getenv('PORT')
+port = os.getenv('PORT_DB')
 sslmode = os.getenv('SSLMODE')
 
 
