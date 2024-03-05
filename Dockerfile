@@ -9,3 +9,6 @@ RUN pip install streamlit==1.29.0
 COPY requirements.txt /code/
 RUN pip install -r requirements.txt
 COPY . /code/
+
+EXPOSE 8501
+CMD ["streamlit run app.py --server.port 8501"]
