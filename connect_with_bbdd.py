@@ -1,9 +1,11 @@
 import psycopg2
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 dbname = os.getenv('DBNAME')
-user = os.getenv('USER')
+user = os.getenv('USER_DB')
 password = os.getenv('PASSWORD')
 host = os.getenv('HOST')
 port = os.getenv('PORT')
