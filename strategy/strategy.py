@@ -3,7 +3,7 @@ from datetime import datetime
 from strategy.mapping_names import get_pretty_names
 import plotly.express as px
 
-watermark_text = "@MarielaBrandoli"
+watermark_text = "@MarielaBrandolin"
 
 factors = {
     'SOJ': 8,
@@ -167,7 +167,7 @@ class Commodity:
             dict(
                 name="mbrandolin watermark",
                 text=watermark_text,
-                textangle=-30,
+                textangle=0,
                 opacity=0.1,
                 font=dict(color="black", size=100),
                 xref="paper",
@@ -386,7 +386,7 @@ class CommodityAnalyzer:
             dict(
                 name="mbrandolin watermark",
                 text=watermark_text,
-                textangle=-30,
+                textangle=0,
                 opacity=0.1,
                 font=dict(color="black", size=100),
                 xref="paper",
