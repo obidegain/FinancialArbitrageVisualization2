@@ -48,7 +48,8 @@ valid_tickers = [
     "SOY.CME/NOV",
     "TRI.ROS/ENE",
     "TRI.ROS/JUL",
-    "TRI.ROS/MAR"
+    "TRI.ROS/MAR",
+    "TRI.ROS/DIC"
 ]
 
 
