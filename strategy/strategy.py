@@ -169,7 +169,7 @@ class Commodity:
                 text=watermark_text,
                 textangle=0,
                 opacity=0.1,
-                font=dict(color="black", size=100),
+                font=dict(color="black", size=50),
                 xref="paper",
                 yref="paper",
                 x=0.5,
@@ -216,8 +216,9 @@ class CommodityAnalyzer:
         self.commodity_a = Commodity(commodity_a['name'], commodity_a['data'], commodity_a['taxes'])
         self.commodity_b = Commodity(commodity_b['name'], commodity_b['data'], commodity_b['taxes'])
         self.combined_price_ratio = self.calculate_ratio_per_expiration_date()
-        self.data_to_plot = self._get_reference_date_to_graph()
-        self.pivot_table_relative, self.pivot_table_nominal = self.pivot_table_creator_strategy()
+        self.data_to_plot = self._get_reference_date_to_graph(combined_price_ratio=self.combined_price_ratio)
+        self.pivot_table_relative, self.pivot_table_nominal = self.pivot_table_creator_strategy(data_to_plot=self.data_to_plot)
+
 
     def calculate_ratio_per_expiration_date(self):
         data_a = self.commodity_a.data
@@ -257,8 +258,8 @@ class CommodityAnalyzer:
 
         return merged_df
 
-    def _get_reference_date_to_graph(self):
-        data = self.combined_price_ratio
+    def _get_reference_date_to_graph(self, combined_price_ratio):
+        data = combined_price_ratio
 
         # Eliminar 29 de febrero
         data['date'] = pd.to_datetime(data['date'], format='%d/%m/%Y')
@@ -327,8 +328,8 @@ class CommodityAnalyzer:
 
         return data
 
-    def pivot_table_creator_strategy(self):
-        data_to_plot = self.data_to_plot
+    def pivot_table_creator_strategy(self, data_to_plot):
+        data_to_plot = data_to_plot
 
         pivot_df_relative = data_to_plot.pivot_table(
             index='date_to_graph',
@@ -353,13 +354,13 @@ class CommodityAnalyzer:
 
         return df_relative, df_nominal
 
-    def get_fig_strategy(self, relative_or_nominal="Relative"):
-        if relative_or_nominal == "Relative":
+    def get_fig_strategy(self, relative_or_nominal="Porcentual"):
+        if relative_or_nominal == 'Porcentual':
             data_to_pivot = self.pivot_table_relative
         elif relative_or_nominal == "Nominal":
             data_to_pivot = self.pivot_table_nominal
         else:
-            data_to_pivot = self.pivot_table_relative
+            data_to_pivot = self.pivot_table_nominal
 
         fig = px.line(
             data_to_pivot,
@@ -399,14 +400,18 @@ class CommodityAnalyzer:
 
         return fig
 
-    def get_main_measures(self, year, relative_or_nominal='relative'):
-        if relative_or_nominal == 'relative':
+    def get_main_measures(self, year, relative_or_nominal='Porcentual'):
+        if relative_or_nominal == 'Porcentual':
             pivot_table = self.pivot_table_relative
         else:
             pivot_table = self.pivot_table_nominal
 
         data_to_plot = self.data_to_plot.sort_values(by='date', ascending=False)
-        type_ratio = f'ratio_{relative_or_nominal}'
+        relative_or_nominal_dict = {
+            'Porcentual': 'relative',
+            'Absoluto': 'nominal'
+        }
+        type_ratio = f'ratio_{relative_or_nominal_dict.get(relative_or_nominal)}'
 
         data = pivot_table[year]
         hisotical_avg = pivot_table['promedio'].mean()

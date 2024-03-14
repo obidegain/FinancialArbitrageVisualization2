@@ -110,25 +110,19 @@ def main():
             with col1:
                 years = sorted(strategy.data_to_plot['year_from_ticker'].unique().tolist(), reverse=True)
                 year = st.selectbox('Seleccione un año para calcular métricas:', years)
-
+            with col5:
                 relative_or_nominal = st.radio(
                     "¿En que formato te gustaría ver los datos?",
                     ["Porcentual", "Absoluto"],
                     horizontal=True,
                 )
 
+                main_measures = strategy.get_main_measures(year, relative_or_nominal=relative_or_nominal)
+                fig = strategy.get_fig_strategy(relative_or_nominal=relative_or_nominal)
                 if relative_or_nominal == "Porcentual":
-                    main_measures = strategy.get_main_measures(year, relative_or_nominal='relative')
-                    fig = strategy.get_fig_strategy('Relativo')
                     pivot_table = strategy.pivot_table_relative
                 elif relative_or_nominal == "Absoluto":
-                    main_measures = strategy.get_main_measures(year, relative_or_nominal='nominal')
-                    fig = strategy.get_fig_strategy('Nominal')
                     pivot_table = strategy.pivot_table_nominal
-                else:
-                    main_measures = strategy.get_main_measures(year, relative_or_nominal='relative')
-                    fig = strategy.get_fig_strategy("Relativo")
-                    pivot_table = strategy.pivot_table_relative
 
         with st.container():
 
