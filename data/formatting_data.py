@@ -101,7 +101,7 @@ def apply_tax(row):
     ticker = row['ticker']
     commodity, market = ticker.split("/")[0].split(".")
 
-    format = "%m-%d-%Y"
+    format = "%d-%m-%Y"
     format_tax = "%d-%m-%Y"
     row['date'] = row['date'].replace("/", "-")
     row['date'] = datetime.strptime(row['date'], format)

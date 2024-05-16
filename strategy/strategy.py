@@ -12,6 +12,11 @@ factors = {
 }
 
 
+def add_one_year(row):
+    year = int(row) + 1
+    return str(year)
+
+
 class Commodity:
     def __init__(self, name, data, taxes):
         self.name = name
@@ -183,7 +188,6 @@ class Commodity:
     def get_main_measures(self, year):
         pivot_table = self.pivot_table
         data_to_plot = self.data_to_plot
-
         data = pivot_table[year]
         hisotical_avg = pivot_table['promedio'].mean()
         max_current_year = data.sort_index(ascending=True).max()
@@ -192,7 +196,10 @@ class Commodity:
         data_from_plot = data_to_plot[data_to_plot['year_from_ticker'] == year]
         last_date = data_from_plot.sort_values(by='date', ascending=True).iloc[-1]['date']
         last_price = data_from_plot.sort_values(by='date', ascending=True).iloc[-1]['price']
-        one_day_ago_of_last_price = data_from_plot.sort_values(by='date', ascending=True).iloc[-2]['price']
+        if len(data_from_plot) >= 2:
+            one_day_ago_of_last_price = data_from_plot.sort_values(by='date', ascending=True).iloc[-2]['price']
+        else:
+            one_day_ago_of_last_price = last_price
         percent_change = ((last_price - one_day_ago_of_last_price) / one_day_ago_of_last_price) * 100
 
         last_date_with_reference_to_graph = data_from_plot.sort_values(by='date', ascending=True).iloc[-1]['date_to_graph']
@@ -357,8 +364,6 @@ class CommodityAnalyzer:
     def get_fig_strategy(self, relative_or_nominal="Porcentual"):
         if relative_or_nominal == 'Porcentual':
             data_to_pivot = self.pivot_table_relative
-        elif relative_or_nominal == "Nominal":
-            data_to_pivot = self.pivot_table_nominal
         else:
             data_to_pivot = self.pivot_table_nominal
 
@@ -420,9 +425,11 @@ class CommodityAnalyzer:
 
         data_from_plot = data_to_plot[data_to_plot['year_from_ticker'] == year]
         last_date = data_from_plot.sort_values(by='date', ascending=True).iloc[-1]['date']
-        data_from_plot.sort_values(by='date', ascending=True).iloc[-1][type_ratio]
         last_price = data_from_plot.sort_values(by='date', ascending=True).iloc[-1][type_ratio]
-        one_day_ago_of_last_price = data_from_plot.sort_values(by='date', ascending=True).iloc[-2][type_ratio]
+        if len(data_from_plot) >= 2:
+            one_day_ago_of_last_price = data_from_plot.sort_values(by='date', ascending=True).iloc[-2][type_ratio]
+        else:
+            one_day_ago_of_last_price = last_price
         percent_change = ((last_price - one_day_ago_of_last_price) / one_day_ago_of_last_price) * 100
 
         last_date_with_reference_to_graph = data_from_plot.sort_values(by='date', ascending=True).iloc[-1]['date_to_graph']
