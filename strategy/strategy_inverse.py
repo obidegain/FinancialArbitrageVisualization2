@@ -174,10 +174,24 @@ class CommodityAnalyzerInverse:
         fig.update_yaxes(
             range=[data_to_pivot.values.min(), data_to_pivot.values.max()]
         )
+        # Asumiendo que las fechas están en el índice del DataFrame
+        dates = pd.to_datetime(data_to_pivot.index)  # Convertir el índice a datetime si no lo está
+
+        # Extraer los meses
+        months = dates.strftime('%b')  # Abreviatura de mes, por ejemplo 'Jan', 'Feb', etc.
+
+        # Asegúrate de que etiquetas_personalizadas tenga el mismo número de elementos que los ticks que quieras mostrar.
+        tick_positions = dates[::30]  # Muestra un tick por cada 30 días, ajusta según sea necesario
+        tick_text = months[::30]  # Etiquetas correspondientes a los ticks seleccionados
+
         fig.update_xaxes(
-            title_text="Date",
+            title_text="",
+            showticklabels=True,
+            tickvals=tick_positions,
+            ticktext=tick_text,
             rangeslider=dict(
                 visible=True,
+                bgcolor='rgb(242, 244, 244)',
                 thickness=0.05
             )
         )
@@ -202,6 +216,11 @@ class CommodityAnalyzerInverse:
                 showarrow=False,
             )
         ]
+
+        trace_count = len(fig.data)
+        if trace_count > 1:
+            fig.data[trace_count - 3].update(line=dict(color='black', width=3))
+            fig.data[trace_count - 2].update(line=dict(color='crimson', width=3))
 
         return fig
 
